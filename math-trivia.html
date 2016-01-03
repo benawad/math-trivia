@@ -1,14 +1,32 @@
 <head>
-  <title>math-trivia</title>
+  <title>Math Trivia</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+    <div ng-app="math-trivia" ng-controller="questionCtrl">
+        <header>
+            <h1>Math Trivia!</h1>
+        </header>
 
-  {{> hello}}
+        <div ng-show="correct">
+            <h2>Correct!</h2>
+        </div>
+
+        <div ng-show="incorrect">
+            <h2>Incorrect</h2>
+            <h3>Correct answer: {{answer}}</h3>
+        </div>
+
+        <button ng-click="nextQuestion()" ng-show="correct || incorrect">Next Question</button>
+
+        <div ng-hide="correct || incorrect">
+            <h2>{{question}}</h2>
+            <form novalidate>
+                <input type="text" ng-model="guess" placeholder="Take a guess"/>
+                <button type="submit" ng-click="submit()">Submit</button>
+            </form>
+        </div>
+
+
+    </div>
 </body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>

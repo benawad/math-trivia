@@ -1,23 +1,31 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+    var app = angular.module('math-trivia', ['angular-meteor']);
+    app.controller('questionCtrl', ['$scope', '$http', function($scope, $http){
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
-    }
-  });
+        $http.get("http://numbersapi.com/random/trivia?json=true").then(function(res){
+            $scope.question = res.data.text.replace(res.data.number, '____________');
+            $scope.answer = res.data.number;
+        });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
-    }
-  });
+        $scope.submit = function(){
+
+            if(+$scope.guess === $scope.answer){
+                $scope.correct = true;
+            } else {
+                $scope.incorrect = true;
+            }
+
+        };
+
+        $scope.nextQuestion = function(){
+            $scope.correct = false;
+            $scope.incorrect = false;
+            $http.get("http://numbersapi.com/random/trivia?json=true").then(function(res){
+                $scope.question = res.data.text.replace(res.data.number, '____________');
+                $scope.answer = res.data.number;
+            });
+            $scope.guess = '';
+        }
+    }]);
 }
 
-if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
-}
